@@ -3,7 +3,7 @@ const https = require('https');
 
 const bitPrecoUrl = 'https://api.bitpreco.com/';
 
-async function getPrice() {
+async function getTicker() {
     let config = {
         headers: {
             'Accept': 'application/json',
@@ -21,4 +21,4 @@ async function getPrice() {
     }
 }
 
-module.exports.getPrice = getPrice;
+module.exports.getTicker = getTicker;
