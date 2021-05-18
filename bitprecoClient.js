@@ -3,17 +3,30 @@ const https = require('https');
 
 const bitPrecoUrl = 'https://api.bitpreco.com/';
 
-async function getTicker() {
-    let config = {
-        headers: {
-            'Accept': 'application/json',
-        },
-        httpsAgent: new https.Agent({
-            rejectUnauthorized: false
-        })
-    }
+let config = {
+    headers: {
+        'Accept': 'application/json',
+    },
+    httpsAgent: new https.Agent({
+        rejectUnauthorized: false
+    })
+}
+
+async function getTicker(symbol) {
+    
     try {
-        const response = await axios.get(bitPrecoUrl + 'btc' + '-brl/ticker', config);
+        const response = await axios.get(bitPrecoUrl + symbol + '-brl/ticker', config);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+async function getTrades(symbol) {
+    
+    try {
+        const response = await axios.get(bitPrecoUrl + symbol + '-brl/trades', config);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -22,3 +35,4 @@ async function getTicker() {
 }
 
 module.exports.getTicker = getTicker;
+module.exports.getTrades = getTrades;
