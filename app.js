@@ -6,23 +6,37 @@ const app = express();
 async function createResponse() {
     var btcTicker = await bitprecoClient.getTicker('btc');
     var ethTicker = await bitprecoClient.getTicker('eth');
-    console.log("Ticker: ", btcTicker);
+    console.log("BTC Ticker: ", btcTicker);
+    console.log("ETH Ticker: ", ethTicker);
+
+    var btcMedian = calculator.calculateMedian(btcTicker.high, btcTicker.low);
+    var btcLastHighVar = calculator.calculateHighVar(btcTicker.high, btcTicker.last);
+    var btcLastLowVar = calculator.calculateLowVar(btcTicker.low, btcTicker.last);
+    var isWorthBuyingBtc = calculator.isWorthBuying(btcLastLowVar);
+
+    var ethMedian = calculator.calculateMedian(ethTicker.high, ethTicker.low);
+    var ethLastHighVar = calculator.calculateHighVar(ethTicker.high, ethTicker.last);
+    var ethLastLowVar = calculator.calculateLowVar(ethTicker.low, ethTicker.last);
+    var isWorthBuyingEth = calculator.isWorthBuying(ethLastLowVar);
+    
     return [
         {
             bitcoinPrice: btcTicker.last,
             high: btcTicker.high,
             low: btcTicker.low,
-            median: calculator.calculateMedian(btcTicker.high, btcTicker.low),
-            lastHighVar: calculator.calculateHighVar(btcTicker.high, btcTicker.last),
-            lastLowVar: calculator.calculateLowVar(btcTicker.low, btcTicker.last)
+            median: btcMedian,
+            lastHighVar: btcLastHighVar,
+            lastLowVar: btcLastLowVar,
+            isWorthBuying: isWorthBuyingBtc
         },
         {
             ethPrice: ethTicker.last,
             high: ethTicker.high,
             low: ethTicker.low,
-            median: calculator.calculateMedian(ethTicker.high, ethTicker.low),
-            lastHighVar: calculator.calculateHighVar(ethTicker.high, ethTicker.last),
-            lastLowVar: calculator.calculateLowVar(ethTicker.low, ethTicker.last)
+            median: ethMedian,
+            lastHighVar: ethLastHighVar,
+            lastLowVar: ethLastLowVar,
+            isWorthBuying: isWorthBuyingEth
         }
     ]
 }
